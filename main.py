@@ -3,7 +3,9 @@ import imageio.v3 as iio
 from wgpu.gui.auto import WgpuCanvas, run
 import pygfx as gfx
 import pylinalg as la
+from lupa.lua54 import LuaRuntime
 
+lua = LuaRuntime()
 
 canvas = WgpuCanvas()
 renderer = gfx.renderers.WgpuRenderer(canvas)
@@ -14,7 +16,6 @@ scene.add(gfx.Background.from_color("#446"))
 
 im = iio.imread("imageio:astronaut.png").astype(np.float32) / 255
 tex = gfx.Texture(im, dim=2)
-
 cube = gfx.Mesh(
     gfx.box_geometry(200, 200, 200),
     gfx.MeshBasicMaterial(map=tex, opacity=0.8, pick_write=True),
@@ -28,7 +29,7 @@ torus = gfx.Mesh(
 torus.local.x -= 150
 scene.add(torus)
 
-camera = gfx.PerspectiveCamera(70, 16 / 9)
+camera = gfx.PerspectiveCamera(70, 16 // 9)
 camera.show_object(scene)
 
 scene.add(gfx.AmbientLight(), camera.add(gfx.DirectionalLight()))

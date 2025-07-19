@@ -4,9 +4,7 @@ import textwrap
 from typing import get_type_hints,Any
 
 import pygfx
-from lupa.lua54 import LuaRuntime
 
-lua = LuaRuntime()
 
 lua_bindings = {}
 custom_type_map = {}
@@ -88,6 +86,16 @@ background:dict[str,Any] = {
 }
 scene["background"] = background
 
+geometry:dict[str,Any] = {
+    "_NS_PATH":"game.scene.geometry",
+}
+scene["geometry"] = geometry
+
+material:dict[str,Any] = {
+    "_NS_PATH":"game.scene.material",
+}
+scene["material"] = material
+
 @bind(scene,"mesh")
 def makeMesh(geometry:pygfx.Geometry,material:pygfx.Material) -> pygfx.Mesh:
     return pygfx.Mesh(geometry,material)
@@ -105,8 +113,16 @@ def makeCamera(fov:int,aspect:int)->pygfx.PerspectiveCamera:
     return pygfx.PerspectiveCamera(fov,aspect)
 
 @bind(background,"color")
-def setBackgroundColor(scn:pygfx.Scene,colors: list):
-    scn.add(pygfx.Background.from_color(*colors))
+def setBackgroundColor(scn:pygfx.Scene,color: str):
+    scn.add(pygfx.Background.from_color(color))
+    
+@bind(geometry,"box")
+def box(w:int,h:int,d:int) -> pygfx.Geometry:
+    return pygfx.box_geometry(w,h,d)
+
+@bind(material,"proto")
+def protoMaterial() -> pygfx.Material:
+    return pygfx.GridMaterial()
 
 print(lua_bindings)
 
@@ -115,7 +131,9 @@ with open("gen/engine.lua","w") as f:
 --#region Namespace
 game = {
     scene = {
-        background = {}
+        background = {},
+        geometry = {},
+        material = {}
     }
 }   
 --#endregion Namespace
