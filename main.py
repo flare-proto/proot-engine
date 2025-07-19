@@ -21,8 +21,7 @@ with open("game/init.lua","r") as f:
 g.init_scene()
 
 def animate():
-
-
+    g.onFrame()
     renderer.render(g.scene, g.camera)
     canvas.request_draw()
 
