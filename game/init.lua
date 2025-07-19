@@ -2,9 +2,9 @@ local test = {}
 function test.init_scene()
     local scene = game.scene.scene()
     local camera = game.scene.camera(70,16/9)
-    game.scene.background.color(scene,"#111")
+    game.scene.background.color(scene,"#999")
     local box = game.scene.mesh(
-        game.scene.geometry.box(200,200,200),
+        game.scene.geometry.box(100,100,200),
         game.scene.material.proto()
     )
     box.world.x = 150

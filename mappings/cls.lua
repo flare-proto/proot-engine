@@ -39,7 +39,12 @@ function Camera.show_object(obj)
     
 end
 
+---@class ndarray
+local ndarray = {}
+
+
 ---@class AffineTransform
 ---@field x number
 ---@field y number
+---@field rotation ndarray
 local AffineTransform = {}

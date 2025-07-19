@@ -1,7 +1,9 @@
 import functools
 import inspect
 import textwrap
-from typing import get_type_hints,Any
+from typing import get_type_hints,Any,Tuple
+import pylinalg as la
+import numpy as np
 
 import pygfx
 
@@ -36,6 +38,8 @@ register_lua_type(pygfx.Scene,"Scene")
 register_lua_type(pygfx.Mesh,"Mesh")
 register_lua_type(pygfx.PerspectiveCamera,"Camera")
 register_lua_type(pygfx.Light,"Light")
+register_lua_type(Tuple[float, float, float],"Vec3")
+register_lua_type(np.ndarray,"ndarray")
 
 def bind(namespace,lua_func_name):
     def fx(func):
@@ -101,13 +105,14 @@ light:dict[str,Any] = {
 }
 scene["light"] = light
 
+util:dict[str,Any] = {
+    "_NS_PATH":"game.util",
+}
+game["util"] = util
+
 @bind(scene,"mesh")
 def makeMesh(geometry:pygfx.Geometry,material:pygfx.Material) -> pygfx.Mesh:
     return pygfx.Mesh(geometry,material)
-
-@bind(scene,"material")
-def makeMaterial() -> pygfx.Material:
-    return pygfx.MeshPhongMaterial(pick_write=True)
 
 @bind(scene,"scene")
 def makeScene() -> pygfx.Scene:
@@ -127,7 +132,7 @@ def box(w:int,h:int,d:int) -> pygfx.Geometry:
 
 @bind(material,"proto")
 def protoMaterial() -> pygfx.Material:
-    return pygfx.GridMaterial()
+    return pygfx.MeshPhongMaterial()
 
 @bind(light,"ambientLight")
 def AmbientLight() -> pygfx.Light:
@@ -137,12 +142,21 @@ def AmbientLight() -> pygfx.Light:
 def DirectionalLight() -> pygfx.Light:
     return pygfx.DirectionalLight()
 
+@bind(util,"quat_from_euler")
+def quat_from_euler(euler: Tuple[float,float,float])->np.ndarray:
+    return la.quat_from_euler(euler)
+
+@bind(util,"quat_mul")
+def quat_mul(q1:np.ndarray,q2:np.ndarray)->np.ndarray:
+    return la.quat_mul(q1,q2)
+
 print(lua_bindings)
 
 with open("gen/engine.lua","w") as f:
     f.write("""-- Autogened typings
 --#region Namespace
 game = {
+    util = {},
     scene = {
         background = {},
         geometry = {},
