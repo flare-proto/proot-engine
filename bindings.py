@@ -35,7 +35,7 @@ register_lua_type(pygfx.Material,"Material")
 register_lua_type(pygfx.Scene,"Scene")
 register_lua_type(pygfx.Mesh,"Mesh")
 register_lua_type(pygfx.PerspectiveCamera,"Camera")
-
+register_lua_type(pygfx.Light,"Light")
 
 def bind(namespace,lua_func_name):
     def fx(func):
@@ -96,6 +96,11 @@ material:dict[str,Any] = {
 }
 scene["material"] = material
 
+light:dict[str,Any] = {
+    "_NS_PATH":"game.scene.light",
+}
+scene["light"] = light
+
 @bind(scene,"mesh")
 def makeMesh(geometry:pygfx.Geometry,material:pygfx.Material) -> pygfx.Mesh:
     return pygfx.Mesh(geometry,material)
@@ -124,6 +129,14 @@ def box(w:int,h:int,d:int) -> pygfx.Geometry:
 def protoMaterial() -> pygfx.Material:
     return pygfx.GridMaterial()
 
+@bind(light,"ambientLight")
+def AmbientLight() -> pygfx.Light:
+    return pygfx.AmbientLight()
+
+@bind(light,"directionalLight")
+def DirectionalLight() -> pygfx.Light:
+    return pygfx.DirectionalLight()
+
 print(lua_bindings)
 
 with open("gen/engine.lua","w") as f:
@@ -133,7 +146,8 @@ game = {
     scene = {
         background = {},
         geometry = {},
-        material = {}
+        material = {},
+        light = {}
     }
 }   
 --#endregion Namespace

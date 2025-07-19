@@ -1,9 +1,19 @@
+--TODO remap WorldObject.local to WorldObject.localTransform
+
 ---@class WorldObject
+---@field local AffineTransform
+---@field world AffineTransform
 local WorldObject = {}
 
 ---@param func function
 ---@param on string
 function WorldObject.add_event_handler(func,on)
+    
+end
+
+---@param obj WorldObject 
+---@return WorldObject
+function WorldObject.add(obj)
     
 end
 
@@ -17,3 +27,19 @@ end
 
 ---@class Mesh:WorldObject
 local Mesh = {}
+
+---@class Light:WorldObject
+local Light = {}
+
+---@class Camera:WorldObject
+local Camera = {}
+
+---@param obj WorldObject
+function Camera.show_object(obj)
+    
+end
+
+---@class AffineTransform
+---@field x number
+---@field y number
+local AffineTransform = {}
