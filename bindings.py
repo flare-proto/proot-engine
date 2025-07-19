@@ -1,12 +1,13 @@
 import functools
 import inspect
 import textwrap
-from typing import get_type_hints,Any,Tuple
+from typing import get_type_hints,Any,Tuple,Callable
 import pylinalg as la
 import numpy as np
 
-import pygfx
+import pygfx,proot
 
+type Callback = Callable[pygfx.Event,None]
 
 lua_bindings = {}
 custom_type_map = {}
@@ -40,6 +41,8 @@ register_lua_type(pygfx.PerspectiveCamera,"Camera")
 register_lua_type(pygfx.Light,"Light")
 register_lua_type(Tuple[float, float, float],"Vec3")
 register_lua_type(np.ndarray,"ndarray")
+register_lua_type(proot.Actor,"Actor")
+register_lua_type(Callback,"function")
 
 def bind(namespace,lua_func_name):
     def fx(func):
@@ -110,6 +113,11 @@ util:dict[str,Any] = {
 }
 game["util"] = util
 
+@bind(game,"on")
+def on(func:Callback,evt:str):
+    rend:pygfx.renderers.WgpuRenderer = game["renderer"]
+    rend.add_event_handler(func,evt)
+
 @bind(scene,"mesh")
 def makeMesh(geometry:pygfx.Geometry,material:pygfx.Material) -> pygfx.Mesh:
     return pygfx.Mesh(geometry,material)
@@ -122,6 +130,10 @@ def makeScene() -> pygfx.Scene:
 def makeCamera(fov:int,aspect:int)->pygfx.PerspectiveCamera:
     return pygfx.PerspectiveCamera(fov,aspect)
 
+@bind(scene,"OrthographicCamera")
+def OrthographicCamera(w:int,h:int)->pygfx.OrthographicCamera:
+    return pygfx.OrthographicCamera(w,h)
+
 @bind(background,"color")
 def setBackgroundColor(scn:pygfx.Scene,color: str):
     scn.add(pygfx.Background.from_color(color))
@@ -129,6 +141,10 @@ def setBackgroundColor(scn:pygfx.Scene,color: str):
 @bind(geometry,"box")
 def box(w:int,h:int,d:int) -> pygfx.Geometry:
     return pygfx.box_geometry(w,h,d)
+
+@bind(geometry,"axes")
+def axes(size:int,thick:int) -> pygfx.WorldObject:
+    return pygfx.AxesHelper(size,thick)
 
 @bind(material,"proto")
 def protoMaterial() -> pygfx.Material:
@@ -149,6 +165,10 @@ def quat_from_euler(euler: Tuple[float,float,float])->np.ndarray:
 @bind(util,"quat_mul")
 def quat_mul(q1:np.ndarray,q2:np.ndarray)->np.ndarray:
     return la.quat_mul(q1,q2)
+
+@bind(scene,"actor")
+def makeActor(name:str="") -> proot.Actor:
+    return proot.Actor(name=name)
 
 print(lua_bindings)
 

@@ -48,3 +48,7 @@ local ndarray = {}
 ---@field y number
 ---@field rotation ndarray
 local AffineTransform = {}
+
+---@class Actor:WorldObject
+---@field localTransform AffineTransform
+local Actor = {}
