@@ -59,6 +59,9 @@ def draw_imgui():
     )
     if imgui.begin_main_menu_bar():
         if imgui.begin_menu("File", True):
+            clicked_save, _ = imgui.menu_item("Save", "Cmd+S", False, True)
+            if clicked_save:
+                pass
             clicked_quit, _ = imgui.menu_item("Quit", "Cmd+Q", False, True)
             if clicked_quit:
                 sys.exit(0)
@@ -71,16 +74,21 @@ def draw_imgui():
 
             imgui.end_menu()
         if imgui.begin_menu("Build", True):
-            clicked_quit, _ = imgui.menu_item("Mappings", "Build Mappings", False, True)
+            clicked_quit, _ = imgui.menu_item("Lua Mappings", "", False, True)
             if clicked_quit:
                 bindings.build_mappings()
+
+            imgui.end_menu()
+        if imgui.begin_menu("Run", True):
+            clicked_quit, _ = imgui.menu_item("TEST", "", False, True)
+            if clicked_quit:
+                sys.exit(0)
 
             imgui.end_menu()
         imgui.end_main_menu_bar()
     is_expand, _ = imgui.begin(
         "Controls",
         None,
-        flags=imgui.WindowFlags_.no_move | imgui.WindowFlags_.no_resize,
     )
     if is_expand:
         if imgui.collapsing_header("Visibility", imgui.TreeNodeFlags_.default_open):
