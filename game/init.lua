@@ -29,7 +29,7 @@ function test.init_scene()
     camera.show_object(scene)
 
     function test.onFrame()
-        local rot = game.util.quat_from_euler({0.005, 0,0})
+        local rot = game.util.quat_from_euler({-0.0001, 0},"XY")
         box.localTransform.rotation = game.util.quat_mul(rot, box.localTransform.rotation)
     end
 end

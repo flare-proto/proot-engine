@@ -159,8 +159,8 @@ def DirectionalLight() -> pygfx.Light:
     return pygfx.DirectionalLight()
 
 @bind(util,"quat_from_euler")
-def quat_from_euler(euler: Tuple[float,float,float])->np.ndarray:
-    return la.quat_from_euler(euler)
+def quat_from_euler(euler: Tuple[float,float,float],ord:str|None="XYZ")->np.ndarray:
+    return la.quat_from_euler(euler,order=ord)
 
 @bind(util,"quat_mul")
 def quat_mul(q1:np.ndarray,q2:np.ndarray)->np.ndarray:
@@ -170,10 +170,13 @@ def quat_mul(q1:np.ndarray,q2:np.ndarray)->np.ndarray:
 def makeActor(name:str="") -> proot.Actor:
     return proot.Actor(name=name)
 
-print(lua_bindings)
 
-with open("gen/engine.lua","w") as f:
-    f.write("""-- Autogened typings
+def build_mappings():
+    """
+    Builds lua mappings
+    """
+    with open("gen/engine.lua","w") as f:
+        f.write("""-- Autogened typings
 --#region Namespace
 game = {
     util = {},
@@ -187,7 +190,7 @@ game = {
 --#endregion Namespace
 --#region bindings
 """)
-    for k,v in lua_bindings.items():
-        f.write(v)
-        f.write("\n\n")
-    f.write('--#endregion bindings')
+        for k,v in lua_bindings.items():
+            f.write(v)
+            f.write("\n\n")
+        f.write('--#endregion bindings')
