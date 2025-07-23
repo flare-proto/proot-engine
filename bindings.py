@@ -4,6 +4,7 @@ import textwrap
 from typing import get_type_hints,Any,Tuple,Callable
 import pylinalg as la
 import numpy as np
+import proot.file
 
 import pygfx,proot
 
@@ -159,12 +160,24 @@ def DirectionalLight() -> pygfx.Light:
     return pygfx.DirectionalLight()
 
 @bind(util,"quat_from_euler")
-def quat_from_euler(euler: Tuple[float,float,float],ord:str|None="XYZ")->np.ndarray:
+def quat_from_euler(euler: Tuple[float,float,float],ord:str="XYZ")->np.ndarray:
     return la.quat_from_euler(euler,order=ord)
+
+@bind(util,"quat_to_euler")
+def quat_to_euler(q1:np.ndarray)->Tuple[float,float,float]:
+    val = la.quat_to_euler(q1)
+    return (val[0],val[1],val[2])
 
 @bind(util,"quat_mul")
 def quat_mul(q1:np.ndarray,q2:np.ndarray)->np.ndarray:
     return la.quat_mul(q1,q2)
+
+@bind(util,"save")
+def save(act:pygfx.WorldObject):
+    saver = proot.file.Saver()
+    saver.save(saver.sceneRoot,act)
+    saver.toXML()
+    return 
 
 @bind(scene,"actor")
 def makeActor(name:str="") -> proot.Actor:

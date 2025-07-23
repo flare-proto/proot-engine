@@ -46,6 +46,10 @@ local ndarray = {}
 ---@class AffineTransform
 ---@field x number
 ---@field y number
+---@field z number
+---@field euler_x number
+---@field euler_y number
+---@field euler_z number
 ---@field rotation ndarray
 local AffineTransform = {}
 

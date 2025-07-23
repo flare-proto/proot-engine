@@ -3,6 +3,7 @@ import imageio.v3 as iio
 from wgpu.gui.auto import WgpuCanvas, run
 import pygfx as gfx
 import pylinalg as la
+import pickle
 from lupa.lua54 import LuaRuntime # type: ignore
 from wgpu.utils.imgui import ImguiRenderer
 from imgui_bundle import imgui, hello_imgui, icons_fontawesome_6  # type: ignore
@@ -51,6 +52,7 @@ state = {
 
 camera_state = camera.get_state()
 
+
 def draw_imgui():
     imgui.new_frame()
     imgui.set_next_window_size((250, 0), imgui.Cond_.always)
@@ -90,7 +92,18 @@ def draw_imgui():
         "Controls",
         None,
     )
+    
     if is_expand:
+        if imgui.collapsing_header("Transform", imgui.TreeNodeFlags_.default_open):
+            if imgui.collapsing_header("Position", imgui.TreeNodeFlags_.default_open):
+                imgui.input_float("X pos",0)
+                imgui.input_float("y pos",0)
+                imgui.input_float("z pos",0)
+            if imgui.collapsing_header("Rotation", imgui.TreeNodeFlags_.default_open):
+                imgui.input_float("X rot",0)
+                imgui.input_float("y rot",0)
+                imgui.input_float("z rot",0)
+            
         if imgui.collapsing_header("Visibility", imgui.TreeNodeFlags_.default_open):
             _, state["model"] = imgui.checkbox("show model", state["model"])
 
@@ -106,31 +119,6 @@ def draw_imgui():
 
     imgui.end()
 
-    imgui.set_next_window_size(
-        (gui_renderer.backend.io.display_size.x, 0), imgui.Cond_.always
-    )
-    imgui.set_next_window_pos(
-        (0, gui_renderer.backend.io.display_size.y - 40), imgui.Cond_.always
-    )
-    imgui.begin(
-        "player",
-        True,
-        flags=imgui.WindowFlags_.no_move
-        | imgui.WindowFlags_.no_resize
-        | imgui.WindowFlags_.no_collapse
-        | imgui.WindowFlags_.no_title_bar,
-    )
-
-
-    imgui.push_font(fa)
-    
-
-    imgui.pop_font()
-    imgui.same_line()
-    avail_size = imgui.get_content_region_avail()
-    imgui.set_next_item_width(avail_size.x)
-    
-    imgui.end()
 
     imgui.end_frame()
     imgui.render()

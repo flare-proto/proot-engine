@@ -10,7 +10,7 @@ function test.init_scene()
     )
     local box = game.scene.actor("box")
     scene.add(box.add(box0))
-    box.world.x = 150
+    box.localTransform.x = 150
 
     local box2 = game.scene.mesh(
         game.scene.geometry.box(100,100,100),
@@ -27,10 +27,10 @@ function test.init_scene()
     test.camera = camera
 
     camera.show_object(scene)
-
+    game.util.save(scene)
     function test.onFrame()
-        local rot = game.util.quat_from_euler({-0.0001, 0},"XY")
-        box.localTransform.rotation = game.util.quat_mul(rot, box.localTransform.rotation)
+        
+        box.localTransform.euler_x =box.localTransform.euler_x + 0.1
     end
 end
 
