@@ -1,11 +1,6 @@
 <some_tag>
     <SCENEROOT>
         <Unknown type="&lt;class 'pygfx.objects._more.Scene'&gt;">
-            <Unknown type="&lt;class 'pygfx.helpers._axes.AxesHelper'&gt;">
-                <Mesh x="18.267949016187043" y="0.0" z="0.0" xr="-0.0" yr="1.5707963267948966" zr="0.0" xs="1.0" ys="1.0" zs="1.0" visible="True"/>
-                <Mesh x="0.0" y="18.267949016187043" z="0.0" xr="-1.5707963267948966" yr="0.0" zr="0.0" xs="1.0" ys="1.0" zs="1.0" visible="True"/>
-                <Mesh x="0.0" y="0.0" z="18.267949016187043" xr="0.0" yr="0.0" zr="0.0" xs="1.0" ys="1.0" zs="1.0" visible="True"/>
-            </Unknown>
             <Unknown type="&lt;class 'pygfx.objects._more.Background'&gt;"/>
             <Actor x="150.0" y="0.0" z="0.0" xr="0.0" yr="0.0" zr="0.0" xs="1.0" ys="1.0" zs="1.0" visible="True">
                 <Mesh x="0.0" y="0.0" z="0.0" xr="0.0" yr="0.0" zr="0.0" xs="1.0" ys="1.0" zs="1.0" visible="True"/>

@@ -7,6 +7,10 @@ import pylinalg as la
 impl = getDOMImplementation()
 
 
+blacklist = [
+    proot.pygfx.AxesHelper,
+]
+
 def parse(text:str) -> Document:
     return parseString(text)
 
@@ -89,6 +93,8 @@ class Saver:
         parent.children.append(sav)
         return sav
     def save(self,parent:SaveEntity,act: proot.pygfx.WorldObject):
+        if type(act) in blacklist: return
+        
         if isinstance(act,proot.Actor):
             ret =self._save_actor(parent,act)
         elif isinstance(act,proot.pygfx.PerspectiveCamera):
