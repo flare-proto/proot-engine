@@ -1,7 +1,7 @@
 from xml.dom.minidom import parseString
 from xml.dom.minidom import Document
 from xml.dom.minidom import getDOMImplementation,Element
-import proot
+import proot,pickle,uuid
 import pylinalg as la
 
 impl = getDOMImplementation()
@@ -25,6 +25,8 @@ class SaveEntity:
         self.children:list[SaveEntity] = []
     def toXML(self,doc:Document,parentXML:Element):
         e = doc.createElement(self.typ)
+        if self.id:
+            e.setAttribute("id",str(self.id))
         for k,v in self.values.items():
             e.setAttribute(k,str(v))
         for c in self.children:
@@ -37,6 +39,10 @@ class Saver:
         self.dom = impl.createDocument(None, "some_tag", None)
         self.top_element = self.dom.documentElement
         self.sceneRoot = SaveEntity(0,"SCENEROOT")
+        self.geomRoot = SaveEntity(0,"GEOMROOT")
+        self.matRoot = SaveEntity(0,"MATROOT")
+        self.__geomTrack = {}
+        self.__matTrack = {}
     def __generics(self,act:proot.pygfx.WorldObject):
         eur = la.quat_to_euler(act.local.rotation)
         return {
@@ -68,9 +74,16 @@ class Saver:
         parent.children.append(sav)
         return sav
     def _save_mesh(self,parent:SaveEntity,act:proot.pygfx.Mesh):
+        assert isinstance(act.geometry,proot.pygfx.Geometry)
+        self.__geomTrack[act.geometry._trackable_id] =act.geometry
+        assert isinstance(act.material,proot.pygfx.Material)
+        self.__matTrack[act._id] =act.material
         sav = SaveEntity(
             self.id,"Mesh",
             **self.__generics(act),
+            geom=act.geometry._trackable_id,
+            mat=act._id
+            
         )
         parent.children.append(sav)
         return sav
@@ -113,7 +126,13 @@ class Saver:
             self.save(ret,I)
     def toXML(self):
         assert self.top_element
+        for k,v in self.__geomTrack.items():
+            s = SaveEntity(
+            f"GEO.{k}","GEOM",
+            geom="TODO"
+            )
+            self.geomRoot.children.append(s)
         self.sceneRoot.toXML(self.dom,self.top_element)
-
+        self.geomRoot.toXML(self.dom,self.top_element)
         with open("scene.xml","w") as f:
             self.top_element.writexml(f,addindent="    ",newl="\n")
