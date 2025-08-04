@@ -1,2 +1,6 @@
 gen/
 __pycache__/
+.idea
+dist
+build
+main.spec

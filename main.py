@@ -31,7 +31,7 @@ state = {"pause": False}
 
 fa_loading_params = hello_imgui.FontLoadingParams()
 fa_loading_params.use_full_glyph_range = True
-fa = hello_imgui.load_font("fonts/fontawesome-webfont.ttf", 14, fa_loading_params)
+fa = hello_imgui.load_font("fonts/0xProtoNerdFont-Regular.ttf", 14, fa_loading_params)
 gui_renderer.backend.create_fonts_texture()
 
 
@@ -55,10 +55,8 @@ camera_state = camera.get_state()
 
 def draw_imgui():
     imgui.new_frame()
-    imgui.set_next_window_size((250, 0), imgui.Cond_.always)
-    imgui.set_next_window_pos(
-        (gui_renderer.backend.io.display_size.x - 250, 0), imgui.Cond_.always
-    )
+    #imgui.set_next_window_size((250, 0), imgui.Cond_.always)
+    
     if imgui.begin_main_menu_bar():
         if imgui.begin_menu("File", True):
             clicked_save, _ = imgui.menu_item("Save", "Cmd+S", False, True)
@@ -88,29 +86,34 @@ def draw_imgui():
 
             imgui.end_menu()
         imgui.end_main_menu_bar()
+        
+    imgui.set_next_window_pos(
+        (0, 20), imgui.Cond_.always
+    )
     is_expand, _ = imgui.begin(
         "Controls",
         None,
+        2|4|32|64
     )
-    
     if is_expand:
-        if imgui.collapsing_header("Transform", imgui.TreeNodeFlags_.default_open):
-            if imgui.collapsing_header("Position", imgui.TreeNodeFlags_.default_open):
-                imgui.input_float("X pos",0)
-                imgui.input_float("y pos",0)
-                imgui.input_float("z pos",0)
-            if imgui.collapsing_header("Rotation", imgui.TreeNodeFlags_.default_open):
-                imgui.input_float("X rot",0)
-                imgui.input_float("y rot",0)
-                imgui.input_float("z rot",0)
-            
-        if imgui.collapsing_header("Visibility", imgui.TreeNodeFlags_.default_open):
+        if imgui.collapsing_header("Transform", imgui.TreeNodeFlags_.default_open): # pyright: ignore[reportCallIssue, reportArgumentType]
+            valu = 88.0, 42.0, 69.0
+            changed, values = imgui.input_float3(
+                "Position",valu # pyright: ignore[reportArgumentType]
+            )
+            changed, values = imgui.input_float3(
+                "Rotation",(0,0,0) # pyright: ignore[reportArgumentType]
+            )
+            changed, values = imgui.input_float3(
+                "Scale",(0,0,0) # pyright: ignore[reportArgumentType]
+            )
+        if imgui.collapsing_header("Visibility", imgui.TreeNodeFlags_.default_open): # pyright: ignore[reportCallIssue, reportArgumentType]
             _, state["model"] = imgui.checkbox("show model", state["model"])
 
             _, state["skeleton"] = imgui.checkbox("show skeleton", state["skeleton"])
 
-        if imgui.collapsing_header("Animations", imgui.TreeNodeFlags_.default_open):
-            selected, state["selected_action"] = imgui.combo(
+        if imgui.collapsing_header("Animations", imgui.TreeNodeFlags_.default_open):# pyright: ignore[reportCallIssue, reportArgumentType]
+            selected, state["selected_action"] = imgui.combo( # pyright: ignore[reportArgumentType]
                 "Animation",
                 state["selected_action"],
                 ["A","B","C"],
@@ -127,6 +130,16 @@ def draw_imgui():
 
 
 gui_renderer.set_gui(draw_imgui)
+
+def on_key_down(event):
+    print(f"Key pressed: {event['key']}")
+
+canvas.add_event_handler(on_key_down, "key_down")
+
+def on_key_down(event):
+    print(f"Key pressed: {event['key']}")
+
+canvas.add_event_handler(on_key_down, "key_down")
 
 def animate():
     g.onFrame()
