@@ -132,7 +132,14 @@ class Saver:
             geom="TODO"
             )
             self.geomRoot.children.append(s)
+        for k,v in self.__matTrack.items():
+            s = SaveEntity(
+            f"MAT.{k}","MAT",
+            mat="TODO"
+            )
+            self.matRoot.children.append(s)
         self.sceneRoot.toXML(self.dom,self.top_element)
         self.geomRoot.toXML(self.dom,self.top_element)
+        self.matRoot.toXML(self.dom,self.top_element)
         with open("scene.xml","w") as f:
             self.top_element.writexml(f,addindent="    ",newl="\n")
