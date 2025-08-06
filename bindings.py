@@ -2,6 +2,7 @@ import functools
 import inspect
 import textwrap
 from typing import get_type_hints,Any,Tuple,Callable
+from warnings import deprecated
 import pylinalg as la
 import numpy as np
 import proot.file
@@ -114,6 +115,11 @@ util:dict[str,Any] = {
 }
 game["util"] = util
 
+util_deg:dict[str,Any] = {
+    "_NS_PATH":"game.util.deg",
+}
+util["deg"] = util_deg
+
 @bind(game,"on")
 def on(func:Callback,evt:str):
     rend:pygfx.renderers.WgpuRenderer = game["renderer"]
@@ -163,10 +169,18 @@ def DirectionalLight() -> pygfx.Light:
 def quat_from_euler(euler: Tuple[float,float,float],ord:str="XYZ")->np.ndarray:
     return la.quat_from_euler(euler,order=ord)
 
+@bind(util_deg,"quat_from_euler")
+def quat_from_eulerD(euler: Tuple[float,float,float],ord:str="XYZ")->np.ndarray:
+    return la.quat_from_euler(np.deg2rad(euler),order=ord)
+
 @bind(util,"quat_to_euler")
 def quat_to_euler(q1:np.ndarray)->Tuple[float,float,float]:
     val = la.quat_to_euler(q1)
     return (val[0],val[1],val[2])
+
+@bind(util,"deg2rad")
+def deg2rad(d: float)->float:
+    return np.deg2rad(d)
 
 @bind(util,"quat_mul")
 def quat_mul(q1:np.ndarray,q2:np.ndarray)->np.ndarray:
@@ -192,7 +206,9 @@ def build_mappings():
         f.write("""-- Autogened typings
 --#region Namespace
 game = {
-    util = {},
+    util = {
+        deg = {}
+    },
     scene = {
         background = {},
         geometry = {},

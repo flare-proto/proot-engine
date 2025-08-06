@@ -3,12 +3,14 @@
         <Unknown type="&lt;class 'pygfx.objects._more.Scene'&gt;">
             <Unknown id="1" type="&lt;class 'pygfx.objects._more.Background'&gt;"/>
             <Actor id="2" x="150.0" y="0.0" z="0.0" xr="0.0" yr="0.0" zr="0.0" xs="1.0" ys="1.0" zs="1.0" visible="True">
-                <Mesh id="3" x="0.0" y="0.0" z="0.0" xr="0.0" yr="0.0" zr="0.0" xs="1.0" ys="1.0" zs="1.0" visible="True" geom="37" mat="617190"/>
+                <Mesh id="3" x="0.0" y="0.0" z="0.0" xr="0.0" yr="0.0" zr="0.0" xs="1.0" ys="1.0" zs="1.0" visible="True" geom="37" mat="86599"/>
             </Actor>
-            <Mesh id="4" x="-150.0" y="0.0" z="0.0" xr="0.0" yr="0.0" zr="0.0" xs="1.0" ys="1.0" zs="1.0" visible="True" geom="48" mat="105558"/>
-            <AmbientLight id="5" x="0.0" y="0.0" z="0.0" xr="0.0" yr="0.0" zr="0.0" xs="1.0" ys="1.0" zs="1.0" visible="True" r="1.0" g="1.0" b="1.0" a="1.0" intensity="0.20000000298023224"/>
-            <PerspectiveCamera id="6" x="0.0" y="0.0" z="302.95594203162017" xr="0.0" yr="0.0" zr="0.0" xs="1.0" ys="1.0" zs="1.0" visible="True" fov="70.0" aspect="1.777777777777778">
-                <DirectionalLight id="7" x="0.0" y="0.0" z="0.0" xr="0.0" yr="0.0" zr="0.0" xs="1.0" ys="1.0" zs="1.0" visible="True" r="1.0" g="1.0" b="1.0" a="1.0" intensity="3.0"/>
+            <Actor id="4" x="-150.0" y="0.0" z="0.0" xr="0.0" yr="0.0" zr="0.0" xs="1.0" ys="1.0" zs="1.0" visible="True">
+                <Mesh id="5" x="0.0" y="0.0" z="0.0" xr="0.0" yr="0.0" zr="0.0" xs="1.0" ys="1.0" zs="1.0" visible="True" geom="48" mat="538771"/>
+            </Actor>
+            <AmbientLight id="6" x="0.0" y="0.0" z="0.0" xr="0.0" yr="0.0" zr="0.0" xs="1.0" ys="1.0" zs="1.0" visible="True" r="1.0" g="1.0" b="1.0" a="1.0" intensity="0.20000000298023224"/>
+            <PerspectiveCamera id="7" x="0.0" y="0.0" z="302.95594203162017" xr="0.0" yr="0.0" zr="0.0" xs="1.0" ys="1.0" zs="1.0" visible="True" fov="70.0" aspect="1.777777777777778">
+                <DirectionalLight id="8" x="0.0" y="0.0" z="0.0" xr="0.0" yr="0.0" zr="0.0" xs="1.0" ys="1.0" zs="1.0" visible="True" r="1.0" g="1.0" b="1.0" a="1.0" intensity="3.0"/>
             </PerspectiveCamera>
         </Unknown>
     </SCENEROOT>
@@ -17,7 +19,7 @@
         <GEOM id="GEO.48" geom="TODO"/>
     </GEOMROOT>
     <MATROOT>
-        <MAT id="MAT.617190" mat="TODO"/>
-        <MAT id="MAT.105558" mat="TODO"/>
+        <MAT id="MAT.86599" mat="TODO"/>
+        <MAT id="MAT.538771" mat="TODO"/>
     </MATROOT>
 </some_tag>

@@ -16,8 +16,9 @@ function test.init_scene()
         game.scene.geometry.box(100,100,100),
         game.scene.material.proto()
     )
-    box2.world.x = -150
-    scene.add(box2)
+    local box1 = game.scene.actor("box1")
+    box1.world.x = -150
+    scene.add(box1.add(box2))
 
     scene.add(game.scene.light.ambientLight())
 
@@ -28,9 +29,12 @@ function test.init_scene()
 
     camera.show_object(scene)
     game.util.save(scene)
+
+    local rot = game.util.deg.quat_from_euler({0.01,0.01,0.01},"XYZ")
+
     function test.onFrame()
-        
-        box.localTransform.euler_x =box.localTransform.euler_x + 0.1
+        box.localTransform.rotation = game.util.quat_mul(rot,box.localTransform.rotation)
+        --box.localTransform.euler_z =box.localTransform.euler_z + 0.1
     end
 end
 

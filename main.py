@@ -7,6 +7,7 @@ import pickle
 from lupa.lua54 import LuaRuntime # type: ignore
 from wgpu.utils.imgui import ImguiRenderer
 from imgui_bundle import imgui, hello_imgui, icons_fontawesome_6  # type: ignore
+from rendercanvas.auto import RenderCanvas, loop
 
 import bindings,sys
 
@@ -16,7 +17,8 @@ lua.globals()["game"] = bindings.game # type: ignore
 
 canvas = WgpuCanvas()
 renderer = gfx.renderers.WgpuRenderer(canvas)
-renderer.blend_mode = "weighted_plus"
+viewport = gfx.Viewport(renderer)
+#renderer.blend_mode = "weighted_plus"
 
 bindings.game["renderer"] = renderer
 
@@ -37,7 +39,7 @@ gui_renderer.backend.create_fonts_texture()
 
 
 camera = gfx.OrthographicCamera(512, 512)
-camera.show_object(g.scene)
+camera.show_object(g.scene) # pyright: ignore[reportAttributeAccessIssue]
 
 #controller = gfx.PanZoomController(camera, register_events=renderer)
 controller = gfx.OrbitController(camera, register_events=renderer)
@@ -88,7 +90,7 @@ def draw_imgui():
         imgui.end_main_menu_bar()
         
     imgui.set_next_window_pos(
-        (0, 20), imgui.Cond_.always
+        (0, 20), imgui.Cond_.always # pyright: ignore[reportArgumentType]
     )
     is_expand, _ = imgui.begin(
         "Controls",
@@ -136,15 +138,16 @@ def on_key_down(event):
 
 canvas.add_event_handler(on_key_down, "key_down")
 
-def on_key_down(event):
-    print(f"Key pressed: {event['key']}")
 
-canvas.add_event_handler(on_key_down, "key_down")
+gizmo = gfx.TransformGizmo(camera)
+gizmo.add_default_event_handlers(viewport, camera)
 
 def animate():
-    g.onFrame()
-    renderer.render(g.scene, camera)
+    g.onFrame() # pyright: ignore[reportAttributeAccessIssue]
+    renderer.render(g.scene, camera) # pyright: ignore[reportAttributeAccessIssue]
+    renderer.render(gizmo, camera,clear_color=False)
     gui_renderer.render()
+    
     canvas.request_draw()
 
 
